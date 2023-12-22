@@ -14,13 +14,19 @@ const sum = pairs.reduce((acc, n) => acc + n, 0);
 
 console.log(sum);
 
-
+// part 2 is about finding the maximums of a game for each color
 function parse(line) {
     const [gameId, gameData] = line.split(': ');
     const id = parseInt(gameId.replace('Game ', ''));
     const sets = gameData.split('; ')
 
-    const flag = sets.every(set => {
+    const maximums = {
+        red: 0,
+        green: 0,
+        blue: 0
+    };
+
+    sets.forEach(set => {
         const cubes = set.split(', ') // 1 blue, 1 red
 
         const data = cubes.reduce((acc, cube) => {
@@ -29,9 +35,19 @@ function parse(line) {
             return acc;
         }, {});
 
-        return !(data['red'] > 12 || data['green'] > 13 || data['blue'] > 14);
+        if(data.red > maximums.red){
+            maximums.red = data.red;
+        }
+        if(data.blue > maximums.blue){
+            maximums.blue = data.blue;
+        }
+        if(data.green > maximums.green){
+            maximums.green = data.green;
+        }
 
     });
 
-    return flag ? id : 0;
+    console.log(maximums);
+
+    return maximums.red * maximums.blue * maximums.green;
 }
